@@ -77,16 +77,14 @@ it('lets user2 buy a star and decreases its balance in ether', async() => {
 // Implement Task 2 Add supporting unit tests
 
 it('can add the star name and star symbol properly', async() => {
+   let instance = await StarNotary.deployed();
     // 1. create a Star with different tokenId
-    let instance = await StarNotary.deployed();
-    let user1 = accounts[1];
-    let user2 = accounts[2];
-    let starId = 6;
-    await instance.createStar('awesome star',starId, {from: user1});
+    await instance.createStar('awesome star', 6, {from: owner});
     //2. Call the name and symbol properties in your Smart Contract and compare with the name and symbol provided
-    const name = await instance.tokenIdToStarInfo.call(starId);
-    assert.equal("awesome star", name);
-    //assert.equal("hamada", symbol);
+    //call external functions from ERC721Metadata & store
+    let name = await instance.name()
+    let symbol = await instance.symbol();
+    assert.equal("MyCollectible - MCO", `${name} - ${symbol}`);
 });
 
 it('lets 2 users exchange stars', async() => {
